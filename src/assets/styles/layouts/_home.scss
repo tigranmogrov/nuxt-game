@@ -1,0 +1,37 @@
+.home {
+  &__content {
+    margin-top: 60px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__filters {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &:not(:first-child) {
+      margin-top: 40px;
+    }
+  }
+
+  &__filters-inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    @media screen and (max-width: 767px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    > .form-field {
+      @media screen and (max-width: 767px) {
+        margin-right: auto;
+        margin-left: auto;
+      }
+    }
+  }
+}
