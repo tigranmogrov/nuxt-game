@@ -2,7 +2,7 @@
 import IButton from '@/components/ui/i-button.vue';
 import { useTodosStore } from '@/stores/todos.store';
 import { ActionEnum, type ITodo } from '@/types';
-import { computed, defineEmits } from 'vue';
+import { computed } from 'vue';
 
 const todoStore = useTodosStore();
 
