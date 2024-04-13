@@ -31,6 +31,19 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
+  const logoutUser = (): void => {
+    user.value = null;
+    localStorage.removeItem('user');
+    authStore.setAuth(false);
+  };
+
+  const getCurrentUser = (): void => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  };
+
   const setUser = (payload: IUser): void => {
     user.value = payload;
     authStore.setAuth(true);
@@ -47,6 +60,8 @@ export const useUserStore = defineStore('user', () => {
     getError,
     getUser,
     loginUser,
+    logoutUser,
+    getCurrentUser,
     setUser
   };
 });
