@@ -1,0 +1,13 @@
+.header {
+  padding: 10px 20px;
+
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .btn {
+    max-width: 120px;
+    padding: 5px;
+  }
+}
