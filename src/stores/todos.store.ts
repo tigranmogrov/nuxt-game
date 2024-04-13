@@ -24,12 +24,36 @@ export const useTodosStore = defineStore('todos', () => {
     }
   };
 
+  const createNewTodo = async (data: ICreateTodo): Promise<void> => {
+    try {
+      const todo: ITodo = {
+        ...data,
+        completed: false,
+        id: Date.now()
+      };
+      await API.post('/todos', { body: todo });
+      setTodo(todo);
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  const setTodo = (payload: ITodo): void => {
+    todos.value.push(payload);
+  };
+  const setTodoFavorites = (): void => {
+    const storageFavorites: string | null = window.localStorage.getItem('favorites');
+    favorites.value = storageFavorites ? JSON.parse(storageFavorites) : [];
+  };
+
   return {
     todos,
     getTodos,
     getFavorites,
     isLoading,
     userIds,
-    fetchTodos
+    fetchTodos,
+    createNewTodo,
+    setTodoFavorites
   };
 });
