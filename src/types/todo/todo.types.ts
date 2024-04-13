@@ -6,3 +6,13 @@ export interface ITodo {
 }
 
 export interface ICreateTodo extends Pick<ITodo, 'userId' | 'title'> {}
+
+export enum ActionEnum {
+  ADD_FAVORITE = 'addFavorite',
+  REMOVE_FAVORITE = 'removeFavorite'
+}
+
+export interface IUpdateFavoriteAction {
+  action: ActionEnum;
+  id: number;
+}
