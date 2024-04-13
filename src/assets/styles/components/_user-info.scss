@@ -1,0 +1,20 @@
+.user-info {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  row-gap: 4px;
+
+  &__term,
+  &__desc {
+    background-color: $text-color-light;
+    padding: 10px;
+    color: darken($white, 10);
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &__desc {
+    a {
+      color: lighten($accent-color, 20);
+    }
+  }
+}
