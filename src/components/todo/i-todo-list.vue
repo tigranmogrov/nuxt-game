@@ -17,7 +17,7 @@ const { getTodos: todos } = storeToRefs(todoStore);
 const filteredTodos = computed(() => {
   if (!todos.value) return [];
 
-  const searchByTitle = searchByText(todos.value, filtersOption.text);
+  const searchByTitle = searchByText(todos.value, filtersOption.searchText);
   const filteredByUserId = filterByUserId(searchByTitle, filtersOption.userId);
   return filterByStatus(filteredByUserId, filtersOption.status);
 });
