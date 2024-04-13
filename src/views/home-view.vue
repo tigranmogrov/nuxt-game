@@ -1,17 +1,26 @@
 <script setup lang="ts">
+import ISpinner from '@/components/I-spinner.vue';
 import IUserInfo from '@/components/i-user-info.vue';
+import ITodoList from '@/components/todo/i-todo-list.vue';
 import IInput from '@/components/ui/I-input.vue';
 import IButton from '@/components/ui/i-button.vue';
 import FormValidator from '@/composable/form/validation/validate';
 import { todoCreateRules } from '@/composable/form/validation/validationRules';
 import { useTodosStore } from '@/stores/todos.store';
+import { storeToRefs } from 'pinia';
 import { reactive, ref } from 'vue';
 
 const todoStore = useTodosStore();
+const { isLoading } = storeToRefs(todoStore);
 
 const createTodoModel = reactive({
   userId: '',
   title: ''
+});
+const selectedFilter = reactive<{ [key: string]: string }>({
+  status: 'all',
+  userId: 'all',
+  searchText: ''
 });
 
 const formValidator = new FormValidator(createTodoModel, todoCreateRules);
@@ -53,6 +62,11 @@ todoStore.setTodoFavorites();
         />
         <i-button :disabled="isDisabled" type="submit">Create Todo</i-button>
       </form>
+
+      <template v-if="!isLoading">
+        <i-todo-list :filters-option="selectedFilter" />
+      </template>
+      <i-spinner v-else />
     </div>
   </div>
 </template>
