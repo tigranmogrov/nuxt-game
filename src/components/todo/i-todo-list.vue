@@ -29,7 +29,7 @@ const addToFavorite = (id: number) => {
 };
 
 const removeFavorite = (id: number) => {
-  const newFavorites = todoStore.getFavorites.filter((favorite) => favorite !== id);
+  const newFavorites = todoStore.getFavorites.filter((favorite: number) => favorite !== id);
   localStorage.setItem('favorites', JSON.stringify([...newFavorites]));
   todoStore.setTodoFavorites();
 };
