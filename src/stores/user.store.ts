@@ -24,10 +24,10 @@ export const useUserStore = defineStore('user', () => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
       } else {
-        setError();
+        setError('Login error');
       }
     } catch (error: any) {
-      console.error(error.message);
+      throw new Error(error);
     }
   };
 
@@ -49,9 +49,9 @@ export const useUserStore = defineStore('user', () => {
     authStore.setAuth(true);
   };
 
-  const setError = (): void => {
-    error.value = 'Login error';
-    throw new Error('User not exist');
+  const setError = (message: string): void => {
+    error.value = message;
+    throw new Error(message);
   };
 
   return {
