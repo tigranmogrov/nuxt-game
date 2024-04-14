@@ -5,39 +5,35 @@ import ITodoList from '@/components/todo/i-todo-list.vue';
 import IInput from '@/components/ui/I-input.vue';
 import ISelect from '@/components/ui/I-select.vue';
 import IButton from '@/components/ui/i-button.vue';
-import FormValidator from '@/composable/form/validation/validate';
-import { todoCreateRules } from '@/composable/form/validation/validationRules';
+import FormValidator, { todoCreateRules } from '@/composable/form/validation';
 import { useTodosStore } from '@/stores/todos.store';
+import type { ICreateTodo, ISelectedFilters, ISelectStatusOptions } from '@/types';
 import { storeToRefs } from 'pinia';
 import { computed, reactive, ref } from 'vue';
-
-export interface ISelectOptions {
-  value: string;
-  name: string;
-}
 
 const todoStore = useTodosStore();
 const { isLoading, userIds } = storeToRefs(todoStore);
 
-const createTodoModel = reactive({
+const createTodoModel = reactive<ICreateTodo>({
   userId: '',
   title: ''
 });
-const selectedFilter = reactive<{ [key: string]: string }>({
+const selectedFilterModel = reactive<ISelectedFilters>({
   status: 'all',
   userId: 'all',
   searchText: ''
 });
-const statusOptions: ISelectOptions[] = [
+const userIdOptions = computed(() => [
+  { name: 'All', value: 'all' },
+  ...userIds.value.map((id: number) => ({ name: `User-${id}`, value: `${id}` }))
+]);
+
+const statusOptions: ISelectStatusOptions[] = [
   { name: 'All', value: 'all' },
   { name: 'Completed', value: 'completed' },
   { name: 'Uncompleted', value: 'uncompleted' },
   { name: 'Favorites', value: 'favorites' }
 ];
-const userIdOptions = computed(() => [
-  { name: 'All', value: 'all' },
-  ...userIds.value.map((id: number) => ({ name: `User-${id}`, value: `${id}` }))
-]);
 
 const formValidator = new FormValidator(createTodoModel, todoCreateRules);
 const fieldErrors = formValidator.getErrors();
@@ -47,10 +43,15 @@ const createTodo = async () => {
   const errors = formValidator.validateForm();
   if (!errors) {
     isDisabled.value = true;
-    await todoStore.createNewTodo({ ...createTodoModel, userId: Number(createTodoModel.userId) });
-    createTodoModel.userId = '';
-    createTodoModel.title = '';
-    isDisabled.value = false;
+    try {
+      await todoStore.createNewTodo(createTodoModel);
+      createTodoModel.userId = '';
+      createTodoModel.title = '';
+    } catch (error: any) {
+      console.error('Error creating todo:', error.message);
+    } finally {
+      isDisabled.value = false;
+    }
   }
 };
 
@@ -84,21 +85,21 @@ todoStore.setTodoFavorites();
           <h2>Filters</h2>
           <div class="home__filters-inner">
             <i-select
-              v-model="selectedFilter.status"
+              v-model="selectedFilterModel.status"
               label="By Status"
               name="filter-status"
               :options="statusOptions"
             />
             <i-select
-              v-model="selectedFilter.userId"
+              v-model="selectedFilterModel.userId"
               label="By userId"
               name="filter-userId"
               :options="userIdOptions"
             />
-            <i-input v-model="selectedFilter.searchText" label="Search" name="filter-search" />
+            <i-input v-model="selectedFilterModel.searchText" label="Search" name="filter-search" />
           </div>
         </div>
-        <i-todo-list :filters-option="selectedFilter" />
+        <i-todo-list :filters-option="selectedFilterModel" />
       </template>
       <i-spinner v-else />
     </div>
