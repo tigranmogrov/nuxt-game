@@ -18,23 +18,23 @@ export const useTodosStore = defineStore('todos', () => {
       const { data } = await API.get<ITodo[]>('/todos');
       todos.value = data || [];
     } catch (error: any) {
-      console.error(error.message);
+      throw new Error(error);
     } finally {
       isLoading.value = false;
     }
   };
 
-  const createNewTodo = async (data: ICreateTodo): Promise<void> => {
+  const createNewTodo = async ({ userId, ...payload }: ICreateTodo): Promise<void> => {
     try {
-      const todo: ITodo = {
-        ...data,
-        completed: false,
-        id: Date.now()
+      const todo: Omit<ITodo, 'id'> = {
+        ...payload,
+        userId: Number(userId),
+        completed: false
       };
-      await API.post('/todos', { body: todo });
-      setTodo(todo);
+      const { data } = await API.post('/todos', { body: todo });
+      setTodo({ ...data.body, id: data.id });
     } catch (error: any) {
-      console.error(error.message);
+      throw new Error(error);
     }
   };
 
