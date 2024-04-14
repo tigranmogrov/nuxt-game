@@ -5,7 +5,9 @@ export interface ITodo {
   completed: boolean;
 }
 
-export interface ICreateTodo extends Pick<ITodo, 'userId' | 'title'> {}
+export interface ICreateTodo extends Pick<ITodo, 'title'> {
+  userId: string | number;
+}
 
 export enum ActionEnum {
   ADD_FAVORITE = 'addFavorite',
