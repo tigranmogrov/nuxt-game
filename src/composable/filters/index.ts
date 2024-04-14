@@ -1,12 +1,5 @@
 import { useTodosStore } from '@/stores/todos.store';
-import type { ITodo } from '@/types';
-
-enum StatusFilterOptionEnum {
-  AlL = 'all',
-  COMPLETED = 'completed',
-  UNCOMPLETED = 'uncompleted',
-  FAVORITES = 'favorites'
-}
+import { type ITodo, StatusFilterOptionEnum } from '@/types';
 
 const filterCompleted = (todos: ITodo[], status: boolean = true): ITodo[] => {
   return todos.filter((todo: ITodo) => todo.completed === status);
@@ -21,7 +14,7 @@ const filterFavorites = (todos: ITodo[]): ITodo[] => {
 };
 
 const filterStatusOptions = new Map<StatusFilterOptionEnum, (todos: ITodo[]) => ITodo[]>([
-  [StatusFilterOptionEnum.AlL, (todos: ITodo[]) => todos],
+  [StatusFilterOptionEnum.ALL, (todos: ITodo[]) => todos],
   [StatusFilterOptionEnum.COMPLETED, (todos: ITodo[]) => filterCompleted(todos)],
   [StatusFilterOptionEnum.UNCOMPLETED, (todos: ITodo[]) => filterCompleted(todos, false)],
   [StatusFilterOptionEnum.FAVORITES, (todos: ITodo[]) => filterFavorites(todos)]
