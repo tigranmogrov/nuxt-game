@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import IInput from '@/components/ui/I-input.vue';
 import IButton from '@/components/ui/i-button.vue';
-import FormValidator from '@/composable/form/validation/validate';
-import { loginRules } from '@/composable/form/validation/validationRules';
+import FormValidator, { loginRules } from '@/composable/form/validation';
 import { useUserStore } from '@/stores/user.store';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -24,9 +23,14 @@ const submitForm = async () => {
   const errors = formValidator.validateForm();
   if (!errors) {
     isDisabled.value = true;
-    await userStore.loginUser(formData.userName, formData.phoneNumber);
-    await router.push({ name: 'home' });
-    isDisabled.value = false;
+    try {
+      await userStore.loginUser(formData.userName, formData.phoneNumber);
+      await router.push({ name: 'home' });
+    } catch (error: any) {
+      console.error(error.message);
+    } finally {
+      isDisabled.value = false;
+    }
   }
 };
 </script>
