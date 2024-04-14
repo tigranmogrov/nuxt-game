@@ -1,13 +1,11 @@
 <script setup lang="ts">
-export interface ISelectOptions {
-  value: string;
-  name: string;
-}
+import type { ISelectStatusOptions } from '@/types';
+
 export interface IFormSelect {
   id?: string;
   label?: string;
   name: string;
-  options: ISelectOptions[];
+  options: ISelectStatusOptions[];
 }
 
 const model = defineModel<string>();
