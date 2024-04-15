@@ -64,7 +64,7 @@ todoStore.setTodoFavorites();
     <div class="home__content">
       <form class="form home__form" novalidate @submit.prevent="createTodo">
         <i-input
-          v-model="createTodoModel.userId"
+          v-model="createTodoModel.userId as string"
           :class="fieldErrors['userId'] ? 'field-error' : null"
           placeholder="Write id"
           label="UserId"
